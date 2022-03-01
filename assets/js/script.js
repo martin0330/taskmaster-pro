@@ -37,8 +37,8 @@ var loadTasks = function() {
     // then loop over sub-array
         arr.forEach(function(task) {
         createTask(task.text, task.date, list);
+        });
     });
-  });
 };
 
 var saveTasks = function() {
@@ -91,24 +91,24 @@ $(".list-group").on("blur", "textarea", function() {
 
 // modal was triggered
 $("#task-form-modal").on("show.bs.modal", function() {
-  // clear values
-  $("#modalTaskDescription, #modalDueDate").val("");
+// clear values
+$("#modalTaskDescription, #modalDueDate").val("");
 });
 
 // modal is fully visible
 $("#task-form-modal").on("shown.bs.modal", function() {
-  // highlight textarea
-  $("#modalTaskDescription").trigger("focus");
+// highlight textarea
+$("#modalTaskDescription").trigger("focus");
 });
 
 // save button in modal was clicked
 $("#task-form-modal .btn-primary").click(function() {
   // get form values
-  var taskText = $("#modalTaskDescription").val();
-  var taskDate = $("#modalDueDate").val();
+    var taskText = $("#modalTaskDescription").val();
+    var taskDate = $("#modalDueDate").val();
 
-  if (taskText && taskDate) {
-    createTask(taskText, taskDate, "toDo");
+    if (taskText && taskDate) {
+        createTask(taskText, taskDate, "toDo");
 
     // close modal
     $("#task-form-modal").modal("hide");
@@ -174,6 +174,8 @@ $(".list-group").on("blur", "input[type='text']", function() {
     // replace input with span element
     $(this).replaceWith(taskSpan);
 });
+
+
 
 // load tasks for the first time
 loadTasks();
