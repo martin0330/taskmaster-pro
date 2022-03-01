@@ -61,7 +61,6 @@ $(".list-group").on("blur", "textarea", function() {
     // get the textarea's current value/text
     var text = $(this)
         .val()
-        .trim();
     
     // get the parent ul's id attribute
     var status = $(this)
@@ -154,11 +153,15 @@ $(".list-group").on("blur", "input[type='text']", function() {
     // get current text
     var date = $(this)
         .val()
-        .trim();
 
     // get the parent ul's id attribute
     var status = $(this)
         .closest(".list-group")
+        .attr("id")
+        .replace("list-", "");
+
+    var index = $(this)
+        .closest(".list-group-item")
         .index();
 
     // update task in array and re-save to localstorage
@@ -179,17 +182,17 @@ $(".card .list-group").sortable({
     scroll: false,
     tolerance: "pointer",
     helper: "clone",
-    activate: function(event) {
-        console.log("activate", this);
+    activate: function(event, ui) {
+        console.log(ui);
     },
-    deactivate: function(event) {
-        console.log("deactivate", this);
+    deactivate: function(event, ui) {
+        console.log(ui);
     },
     over: function(event) {
-        console.log("over",event.target);
+        console.log(event);
     },
     out: function(event) {
-        console.log("out", event.target);
+        console.log(event);
     },
     update: function(event) {
         // array to store the task data in
@@ -197,23 +200,19 @@ $(".card .list-group").sortable({
 
         // loop over current set of children in sortable list
         $(this).children().each(function() {
-            var text= $(this)
+             // add task data to the temp array as an object
+            tempArr.push({
+            text: $(this)
             .find("p")
             .text()
-            .trim();
+            .trim(),
 
-            var date = $(this)
+            date = $(this)
             .find("span")
             .text()
-            .trim();
-
-        // add task data to the temp array as an object
-        tempArr.push({
-            text: text,
-            date: date
+            .trim(),
+            });
         });
-        });
-        console.log(tempArr);
 
         // trim down list's ID to match object property
         var arrName = $(this)
@@ -223,6 +222,9 @@ $(".card .list-group").sortable({
         // update array on tasks object and save
         tasks[arrName] = tempArr;
         saveTasks();
+    },
+    stop:function(event) {
+        $(this).removeClass("dropover")
     }
 });
 
@@ -234,12 +236,14 @@ $("#trash").droppable({
         ui.draggable.remove();
     },
     over: function(event, ui) {
-        console.log("over");
+        console.log(ui);
     },
     out: function(event,ui) {
-        console.log("out");
+        console.log(ui);
     }
 });
+
+$("#modalDueDate").datePicker();
 
 // load tasks for the first time
 loadTasks();
